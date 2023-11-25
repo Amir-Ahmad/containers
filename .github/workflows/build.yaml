@@ -77,6 +77,20 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Prepare Build Outputs
+        id: prepare-build-outputs
+        shell: bash
+        run: |
+          if [[ "${{ inputs.pushImages }}" == "true" ]]; then
+              image_name="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/${{ matrix.image.name }}"
+              outputs="type=image,name=${image_name},push-by-digest=true,name-canonical=true,push=true"
+          else
+              image_name="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/${{ matrix.image.name }}:zztesting"
+              outputs="type=docker,name=${image_name},push=false"
+          fi
+          echo "image_name=${image_name}" >> $GITHUB_OUTPUT
+          echo "outputs=${outputs}" >> $GITHUB_OUTPUT
+
       - name: Build Image
         id: build
         uses: docker/build-push-action@v5
@@ -86,6 +100,7 @@ jobs:
           context: .
           platforms: ${{ matrix.image.platform  }}
           file: images/${{ matrix.image.name }}/Dockerfile
+          outputs: ${{ steps.prepare-build-outputs.outputs.outputs }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -144,20 +159,14 @@ jobs:
           ls -la
           cat *
 
-      - name: Export GITHUB_REPO_OWNER_LC
-        run: |
-          echo "GITHUB_REPO_OWNER_LC=${GITHUB_OWNER,,}" >>${GITHUB_ENV}
-        env:
-          GITHUB_OWNER: '${{ github.repository_owner }}'
-
       - name: Create manifest list and push
         working-directory: /tmp/${{ matrix.image.name }}/digests
         env:
           TAGS: ${{ toJSON(matrix.image.tags) }}
         run: |
-          docker buildx imagetools create $(jq -cr '. | map("-t ghcr.io/${{ env.GITHUB_REPO_OWNER_LC }}/${{matrix.image.name}}:" + .) | join(" ")'  <<< "$TAGS") \
-              $(printf 'ghcr.io/${{ env.GITHUB_REPO_OWNER_LC }}/${{ matrix.image.name }}@sha256:%s ' *)
+          docker buildx imagetools create $(jq -cr '. | map("-t ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/${{matrix.image.name}}:" + .) | join(" ")'  <<< "$TAGS") \
+              $(printf 'ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/${{ matrix.image.name }}@sha256:%s ' *)
 
       - name: Inspect image
         run: |
-          docker buildx imagetools inspect ghcr.io/${{ env.GITHUB_REPO_OWNER_LC }}/${{ matrix.image.name }}:${{ matrix.image.tags[0] }}
+          docker buildx imagetools inspect ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/${{ matrix.image.name }}:${{ matrix.image.tags[0] }}
