@@ -33,7 +33,7 @@ jobs:
       - name: Generate matrices
         id: generate-matrices
         run: |
-          matrices="$(cue cmd -t imagefilter="${{ inputs.appsToBuild }}" matrix ./...)"
+          matrices="$(cue cmd -t imagefilter="${{ inputs.imagesToBuild }}" matrix ./...)"
           echo "matrices=${matrices}" >> $GITHUB_OUTPUT
           echo "${matrices}"
 
