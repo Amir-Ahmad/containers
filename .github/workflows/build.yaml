@@ -28,7 +28,7 @@ jobs:
       - name: Set up cue
         uses: cue-lang/setup-cue@v1.0.0
         with:
-          version: "0.6.0"
+          version: "v0.6.0"
 
       - name: Generate matrices
         id: generate-matrices
@@ -98,7 +98,7 @@ jobs:
   merge:
     name: Merge ${{ matrix.image.name }}
     runs-on: ubuntu-latest
-    needs: 
+    needs:
       - gen-matrix
       - build
     if: ${{ inputs.pushImages }}
@@ -110,7 +110,7 @@ jobs:
       matrix:
         image: ["${{ fromJSON(needs.gen-matrix.outputs.matrices).merge }}"]
 
-    steps: 
+    steps:
       - name: Download Digests
         uses: actions/download-artifact@v3
         with:
@@ -146,7 +146,7 @@ jobs:
         run: |
           docker buildx imagetools create $(jq -cr '. | map("-t ghcr.io/${{ env.GITHUB_REPO_OWNER_LC }}/${{matrix.image.name}}:" + .) | join(" ")'  <<< "$TAGS") \
               $(printf 'ghcr.io/${{ env.GITHUB_REPO_OWNER_LC }}/${{ matrix.image.name }}@sha256:%s ' *)
-      
+
       - name: Inspect image
         run: |
           docker buildx imagetools inspect ghcr.io/${{ env.GITHUB_REPO_OWNER_LC }}/${{ matrix.image.name }}:${{ matrix.image.tags[0] }}
