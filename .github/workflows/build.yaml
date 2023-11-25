@@ -159,14 +159,18 @@ jobs:
           ls -la
           cat *
 
+      - name: Export GITHUB_REPO_OWNER_LC
+        run: |
+          echo "GITHUB_REPO_OWNER_LC=${GITHUB_REPOSITORY_OWNER,,}" >>${GITHUB_ENV}
+
       - name: Create manifest list and push
         working-directory: /tmp/${{ matrix.image.name }}/digests
         env:
           TAGS: ${{ toJSON(matrix.image.tags) }}
         run: |
-          docker buildx imagetools create $(jq -cr '. | map("-t ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/${{matrix.image.name}}:" + .) | join(" ")'  <<< "$TAGS") \
-              $(printf 'ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/${{ matrix.image.name }}@sha256:%s ' *)
+          docker buildx imagetools create $(jq -cr '. | map("-t ghcr.io/${{ env.GITHUB_REPO_OWNER_LC }}/${{matrix.image.name}}:" + .) | join(" ")'  <<< "$TAGS") \
+              $(printf 'ghcr.io/${{ env.GITHUB_REPO_OWNER_LC }}/${{ matrix.image.name }}@sha256:%s ' *)
 
       - name: Inspect image
         run: |
-          docker buildx imagetools inspect ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/${{ matrix.image.name }}:${{ matrix.image.tags[0] }}
+          docker buildx imagetools inspect ghcr.io/${{ env.GITHUB_REPO_OWNER_LC }}/${{ matrix.image.name }}:${{ matrix.image.tags[0] }}
