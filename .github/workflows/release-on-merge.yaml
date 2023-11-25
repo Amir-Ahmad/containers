@@ -1,0 +1,27 @@
+---
+# src https://github.com/onedr0p/containers/blob/main/.github/workflows/release-on-merge.yaml
+name: Release on Merge
+
+concurrency:
+  group: container-release
+  cancel-in-progress: false
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "images/**"
+      - "!images/**/README.md"
+
+jobs:
+  get-changed-images:
+    uses: ./.github/workflows/get-changed-images.yaml
+
+  build-images:
+    needs: ["get-changed-images"]
+    if: ${{ needs.get-changed-images.outputs.addedOrModified == 'true' }}
+    uses: ./.github/workflows/build.yaml
+    secrets: inherit
+    with:
+      appsToBuild: "${{ needs.get-changed-images.outputs.addedOrModifiedImages }}"
+      pushImages: true

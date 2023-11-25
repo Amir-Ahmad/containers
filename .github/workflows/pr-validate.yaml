@@ -1,0 +1,25 @@
+---
+# src https://github.com/onedr0p/containers/blob/main/.github/workflows/pr-validate.yaml
+name: "Pull Request: Validate"
+
+on:
+  pull_request:
+    branches: ["main"]
+    types: ["opened", "synchronize", "reopened"]
+
+concurrency:
+  group: ${{ github.head_ref }}-pr-validate
+  cancel-in-progress: true
+
+jobs:
+  get-changed-images:
+    uses: amir-ahmad/containers/.github/workflows/get-changed-images.yaml@main
+
+  build-images:
+    needs: ["get-changed-images"]
+    if: ${{ needs.get-changed-images.outputs.addedOrModified == 'true' }}
+    uses: amir-ahmad/containers/.github/workflows/build.yaml@main
+    secrets: inherit
+    with:
+      appsToBuild: "${{ needs.get-changed-images.outputs.addedOrModifiedImages }}"
+      pushImages: false
