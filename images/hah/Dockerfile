@@ -6,7 +6,7 @@ RUN mkdir -p /tmp/dl \
     && curl -fsSL https://github.com/danielskowronski/hetzner-auction-hunter/archive/${VERSION}.tar.gz \
     | tar xzvf - -C /tmp/dl --strip-components=1
 
-FROM python:3.10-slim-buster
+FROM public.ecr.aws/docker/library/python:3.10-slim-bookworm
 
 ARG UID=568
 
