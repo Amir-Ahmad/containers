@@ -3,7 +3,7 @@ FROM quay.io/curl/curl:8.4.0 as builder
 ARG VERSION
 
 RUN mkdir -p /tmp/dl \
-    && curl -fsSL https://github.com/danielskowronski/hetzner-auction-hunter/archive/${VERSION}.tar.gz \
+    && curl -fsSL https://github.com/Amir-Ahmad/hetzner-auction-hunter/archive/refs/tags/${VERSION}.tar.gz \
     | tar xzvf - -C /tmp/dl --strip-components=1
 
 FROM public.ecr.aws/docker/library/python:3.10-slim-bookworm
