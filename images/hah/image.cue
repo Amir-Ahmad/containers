@@ -1,3 +1,3 @@
 package image
 
-image: hah: version: "v2.1.0"
+image: hah: version: "v2.1.1"
