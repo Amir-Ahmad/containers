@@ -21,7 +21,6 @@ RUN chown -R root:root /usr/bin/transmission* \
     && ln -s /usr/bin/transmission-daemon /app/transmission-daemon \
     && curl -fsSL https://github.com/openscopeproject/TrguiNG/releases/download/${GUI_VERSION}/trguing-web-${GUI_VERSION}.zip -o /tmp/gui.zip \
     && unzip /tmp/gui.zip -d /app/web \
-    # && chown -R kah:kah /app/web \
     && rm -rf /tmp/*
 
 USER kah
