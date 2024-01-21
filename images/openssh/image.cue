@@ -1,3 +1,3 @@
 package image
 
-image: openssh: version: "1.0.2"
+image: openssh: version: "1.0.3"
