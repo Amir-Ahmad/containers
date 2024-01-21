@@ -17,6 +17,7 @@ RUN apt-get update \
     sudo \
     && ln -s /usr/bin/fdfind /usr/local/bin/fd \
     && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /var/run/sshd \
     && rm /etc/ssh/*key*
 
 COPY ./images/openssh/sshd_config /etc/ssh/sshd_config
