@@ -21,15 +21,17 @@ fi
 
 chmod 600 "/config/ssh_host_ed25519_key" || true
 
+home="/${SSH_USER_NAME}"
+
 addgroup "${SSH_USER_NAME}" --gid "${SSH_USER_GID}"
 
-adduser "${SSH_USER_NAME}" --gid "${SSH_USER_GID}" --uid "${SSH_USER_UID}" --disabled-password
+adduser "${SSH_USER_NAME}" --gid "${SSH_USER_GID}" --uid "${SSH_USER_UID}" --disabled-password --home "${home}"
 
-mkdir -p "/${SSH_USER_NAME}/.ssh"
+mkdir -p "${home}/.ssh"
 
-echo "${SSH_USER_PUBLIC_KEY}" >> "/${SSH_USER_NAME}/.ssh/authorized_keys"
+echo "${SSH_USER_PUBLIC_KEY}" >> "${home}/.ssh/authorized_keys"
 
-chown -R "${SSH_USER_NAME}:${SSH_USER_NAME}" "/${SSH_USER_NAME}" || true
+chown -R "${SSH_USER_NAME}:${SSH_USER_NAME}" "${home}" || true
 
 if [[ "${SSH_USER_ENABLE_SUDO}" == "true" ]]; then
   log "enabling sudo for ${SSH_USER_NAME}"
