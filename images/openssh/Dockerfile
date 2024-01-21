@@ -19,7 +19,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && rm /etc/ssh/*key*
 
-COPY ./images/ssh/sshd_config /etc/ssh/sshd_config
-COPY ./images/ssh/entrypoint.sh /entrypoint.sh
+COPY ./images/openssh/sshd_config /etc/ssh/sshd_config
+COPY ./images/openssh/entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
