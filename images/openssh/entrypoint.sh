@@ -28,8 +28,10 @@ addgroup "${SSH_USER_NAME}" --gid "${SSH_USER_GID}"
 adduser "${SSH_USER_NAME}" --gid "${SSH_USER_GID}" --uid "${SSH_USER_UID}" --disabled-password --home "${home}"
 
 mkdir -p "${home}/.ssh"
+chmod 700 "${home}/.ssh"
 
 echo "${SSH_USER_PUBLIC_KEY}" >> "${home}/.ssh/authorized_keys"
+chmod 600 "${home}/.ssh/authorized_keys"
 
 chown -R "${SSH_USER_NAME}:${SSH_USER_NAME}" "${home}" || true
 
