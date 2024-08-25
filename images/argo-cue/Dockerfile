@@ -1,11 +1,11 @@
-FROM public.ecr.aws/docker/library/alpine:3.18
+FROM public.ecr.aws/docker/library/alpine:3.20
 
 ARG TARGETARCH
 
-ARG CUE_VERSION="v0.6.0"
-ARG KUSTOMIZE_VERSION="v5.2.1"
-ARG HELM_VERSION="v3.13.2"
-ARG SOPS_VERSION="v3.8.1"
+ARG CUE_VERSION="v0.10.0"
+ARG KUSTOMIZE_VERSION="v5.4.3"
+ARG HELM_VERSION="v3.15.4"
+ARG SOPS_VERSION="v3.9.0"
 
 RUN apk add --no-cache bash git
 
