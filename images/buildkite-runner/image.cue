@@ -1,6 +1,3 @@
 package image
 
-image: "buildkite-runner": {
-	version: "1.0.0"
-	platforms: ["linux/amd64"]
-}
+image: "buildkite-runner": version: "1.0.0"
