@@ -1,3 +1,3 @@
 package image
 
-image: "buildkite-runner": version: "1.0.0"
+image: "buildkite-runner": version: "1.0.1"
