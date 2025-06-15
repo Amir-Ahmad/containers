@@ -121,10 +121,10 @@ jobs:
 
       - name: Upload Digest
         if: ${{ inputs.pushImages }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.image.name }}
-          path: /tmp/${{ matrix.image.name }}/*
+          path: "/tmp/${{ matrix.image.name }}/*"
           if-no-files-found: error
           retention-days: 1
 
@@ -145,7 +145,7 @@ jobs:
 
     steps:
       - name: Download Digests
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.image.name }}
           path: /tmp/${{ matrix.image.name }}
