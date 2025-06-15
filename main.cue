@@ -41,6 +41,6 @@ if input.imagefilter == "" ||
 		name:      v.name
 		version:   v.version
 		platforms: v.platforms
-		tags:      v.tags + [v.version]
+		tags: list.Concat([v.tags, [v.version]])
 	}
 }

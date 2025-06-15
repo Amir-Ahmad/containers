@@ -39,7 +39,7 @@ jobs:
       - name: Set up cue
         uses: cue-lang/setup-cue@v1.0.0
         with:
-          version: "v0.6.0"
+          version: "v0.13.1"
 
       - name: Generate matrices
         id: generate-matrices
