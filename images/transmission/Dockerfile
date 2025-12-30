@@ -1,7 +1,7 @@
-FROM ghcr.io/onedr0p/alpine:rolling@sha256:51632d23e56ae28a34f8e90df6fe8d02730b5462697ae52e8b01ad6484497819
+FROM public.ecr.aws/docker/library/alpine:20251224
 
 ARG VERSION
-ARG GUI_VERSION=v1.1.0
+ARG GUI_VERSION=v1.5.1
 
 ENV HOME=/config \
     XDG_CONFIG_HOME=/config \
@@ -10,9 +10,11 @@ ENV HOME=/config \
     TRANSMISSION_WEB_HOME=/app/web
 
 #hadolint ignore=DL3018
-RUN apk add --no-cache ca-certificates findutils geoip p7zip python3 \
+RUN apk add --no-cache curl ca-certificates findutils geoip p7zip python3 \
     transmission-cli~"${VERSION}" \
     transmission-daemon~"${VERSION}"
+
+WORKDIR "/app"
 
 #hadolint ignore=DL3059
 RUN chown -R root:root /usr/bin/transmission* \
@@ -23,9 +25,11 @@ RUN chown -R root:root /usr/bin/transmission* \
     && unzip /tmp/gui.zip -d /app/web \
     && rm -rf /tmp/*
 
-USER kah
+# Run as nobody user with uid/gid 65534
+USER nobody
+
 COPY ./images/transmission/settings.json.tmpl /app/settings.json.tmpl
 COPY ./images/transmission/entrypoint.sh /entrypoint.sh
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/transmission/transmission"
