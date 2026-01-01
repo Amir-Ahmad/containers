@@ -30,4 +30,6 @@ WORKDIR /app
 COPY --from=builder /home/nonroot/.local /home/nonroot/.local
 COPY --from=builder /app /app
 
-ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:8000", "--preload", "config.wsgi:application", "--timeout", "200", "--max-requests", "500", "--max-requests-jitter", "10"]
+ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:8001", "--preload", "config.wsgi:application", "--timeout", "200", "--max-requests", "500", "--max-requests-jitter", "10"]
+
+EXPOSE 8001
