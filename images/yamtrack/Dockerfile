@@ -24,9 +24,9 @@ FROM base AS final
 ENV PYTHONUNBUFFERED=1
 ENV PATH=/home/nonroot/.local/bin:$PATH
 
-WORKDIR /app
-
 USER nonroot
+
+WORKDIR /app
 
 COPY --from=builder /home/nonroot/.local /home/nonroot/.local
 COPY --from=builder /app /app
