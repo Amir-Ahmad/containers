@@ -16,8 +16,7 @@ WORKDIR /app
 RUN curl -fsSL https://github.com/FuzzyGrim/Yamtrack/archive/refs/tags/v${YAMTRACK_VERSION}.tar.gz \
     | tar xvz -C /tmp/ --strip-components=1 Yamtrack-${YAMTRACK_VERSION}/requirements.txt Yamtrack-${YAMTRACK_VERSION}/src \
     && mv /tmp/src/* . \
-    && pip install --no-cache-dir --user -r /tmp/requirements.txt \
-    && python manage.py collectstatic --noinput
+    && pip install --no-cache-dir --user -r /tmp/requirements.txt
 
 FROM base AS final
 
