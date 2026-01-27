@@ -1,3 +1,3 @@
 package image
 
-image: rsync: version: "0.1.0"
+image: rsync: version: "0.1.1"
